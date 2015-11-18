@@ -1,8 +1,20 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 # (c) 2015, Ludovic Claude <ludovic.claude@laposte.net>
 #
+# This file is part of Ansible
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 
 DOCUMENTATION = """
 module: marathon_app
@@ -10,6 +22,7 @@ version_added: "1.9"
 short_description: start and stop applications with Marathon
 description:
   - Start and stop applications with Marathon.
+author: "Ludovic Claude (@ludovicc)"
 
 options:
   uri:
