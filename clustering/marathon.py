@@ -236,9 +236,7 @@ EXAMPLES = """
 
 """
 
-import json
 import base64
-import time
 
 def request(url, user=None, passwd=None, data=None, method=None):
     if data:
@@ -299,8 +297,8 @@ def create(restbase, user, passwd, params):
 
     # Merge in any additional or overridden fields
     for arg in ['cmd', 'args', 'cpus', 'mem', 'ports', 'requirePorts', 'instances', 'executor', 'container', 'env', 'constraints', 'acceptedResourceRoles', 'labels', 'uris', 'dependencies', 'healthChecks', 'backoffFactor', 'backoffSeconds', 'maxLaunchDelaySeconds', 'upgradeStrategy']:
-    	if params[arg]:
-    		data.update({arg: params[arg]})
+      if params[arg]:
+        data.update({arg: params[arg]})
 
     url = restbase + '/apps'
 
@@ -316,8 +314,8 @@ def edit(restbase, user, passwd, params):
 
     # Merge in any additional or overridden fields
     for arg in ['cmd', 'args', 'cpus', 'mem', 'ports', 'requirePorts', 'instances', 'executor', 'container', 'env', 'constraints', 'acceptedResourceRoles', 'labels', 'uris', 'dependencies', 'healthChecks', 'backoffFactor', 'backoffSeconds', 'maxLaunchDelaySeconds', 'upgradeStrategy']:
-    	if params[arg]:
-    		data.update({arg: params[arg]})
+      if params[arg]:
+        data.update({arg: params[arg]})
 
     url = restbase + '/apps/' + params['id'] + '?force=' + str(params['force']).lower()
 
@@ -345,6 +343,7 @@ def waitForDeployment(restbase, user, passwd, params, deploymentId):
     if time.time() > timeout:
       module.fail_json(msg='Timeout waiting for deployment.')
 
+    return
 
 def restart(restbase, user, passwd, params):
     data = {
@@ -462,17 +461,17 @@ def main():
     # Ensure that we use int values for port mappings
     if module.params['docker_portMappings']:
       mappings = module.params['docker_portMappings']
-      mappings = [{k:int(v) for k,v in kv.iteritems()} for kv in mappings]
+      mappings = [dict((k, int(v)) for k,v in kv.iteritems()) for kv in mappings]
       module.params['docker_portMappings'] = mappings
 
     if module.params['docker_image'] and not module.params['container']:
-    	module.params['container'] = { 'type': 'DOCKER', 'docker': { 'image': module.params['docker_image'], 'forcePullImage': bool(module.params['docker_forcePullImage']), 'privileged': bool(module.params['docker_privileged']), 'network': module.params['docker_network'], 'parameters': module.params['docker_parameters'], 'portMappings': module.params['docker_portMappings']}, 'volumes': module.params['container_volumes']}
+      module.params['container'] = { 'type': 'DOCKER', 'docker': { 'image': module.params['docker_image'], 'forcePullImage': bool(module.params['docker_forcePullImage']), 'privileged': bool(module.params['docker_privileged']), 'network': module.params['docker_network'], 'parameters': module.params['docker_parameters'], 'portMappings': module.params['docker_portMappings']}, 'volumes': module.params['container_volumes']}
 
     if module.params['upgradeStrategy_minimumHealthCapacity']:
-    	module.params['upgradeStrategy'].update({'minimumHealthCapacity': module.params['upgradeStrategy_minimumHealthCapacity']})
+      module.params['upgradeStrategy'].update({'minimumHealthCapacity': module.params['upgradeStrategy_minimumHealthCapacity']})
 
     if module.params['upgradeStrategy_maximumOverCapacity']:
-    	module.params['upgradeStrategy'].update({'maximumOverCapacity': module.params['upgradeStrategy_maximumOverCapacity']})
+      module.params['upgradeStrategy'].update({'maximumOverCapacity': module.params['upgradeStrategy_maximumOverCapacity']})
 
     if not uri.endswith('/'):
         uri = uri+'/'
