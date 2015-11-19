@@ -18,7 +18,7 @@
 
 DOCUMENTATION = """
 module: marathon_app
-version_added: "1.9"
+version_added: "2.0"
 short_description: start and stop applications with Marathon
 description:
   - Start and stop applications with Marathon.
