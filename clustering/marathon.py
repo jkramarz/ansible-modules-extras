@@ -75,6 +75,11 @@ options:
     description:
      - The amount of memory in MB that is needed for the application per instance.
 
+  disk:
+    required: false
+    description:
+     - The amount of disk in MB that is reserved for the application per instance.
+
   ports:
     required: false
     description:
@@ -159,6 +164,11 @@ options:
     required: false
     description:
      - URIs defined here are resolved, before the application gets started. If the application has external dependencies, they should be defined here.
+
+  storeUrls:
+    required: false
+    description:
+     - a sequence of URIs, that get fetched on each instance, that gets started. The artifact could be fetched directly from the source, or put into the artifact store. One simple way to do this is automatic artifact storing.
 
   dependencies:
     required: false
@@ -424,30 +434,31 @@ def main():
             cmd=dict(aliases=['command'], type='str'),
             args=dict(aliases=['arguments'], type='list'),
             cpus=dict(type='float'),
-            mem=dict(aliases=['memory']),
-            ports=dict(type='list'),
+            mem=dict(aliases=['memory'],type='int'),
+            disk=dict(default=0,type='int'),
+            ports=dict(default=[],type='list'),
             requirePorts=dict(default=False, type='bool'),
-            instances=dict(),
-            executor=dict(),
-            container=dict(),
+            instances=dict(type='int'),
+            executor=dict(default="",type='str'),
+            container=dict(type='dict'),
             docker_image=dict(),
             docker_forcePullImage=dict(default=False, type='bool'),
             docker_privileged=dict(default=False, type='bool'),
             docker_network=dict(default='none', type='str'),
-            docker_parameters=dict(default=[]),
-            docker_portMappings=dict(default=[]),
-            container_volumes=dict(default=[]),
+            docker_parameters=dict(default=[],type='list'),
+            docker_portMappings=dict(default=[],type='list'),
+            container_volumes=dict(default=[],type='list'),
             env=dict(default={},type='dict'),
-            constraints=dict(type='list'),
+            constraints=dict(default=[],type='list'),
             acceptedResourceRoles=dict(),
             labels=dict(type='list'),
-            uris=dict(type='list'),
-            dependencies=dict(type='list'),
-            healthChecks=dict(type='list'),
+            uris=dict(default=[],type='list'),
+            dependencies=dict(default=[],type='list'),
+            healthChecks=dict(default=[],type='list'),
             backoffSeconds=dict(type='float'),
             backoffFactor=dict(type='float'),
             maxLaunchDelaySeconds=dict(type='float'),
-            upgradeStrategy=dict(default={}),
+            upgradeStrategy=dict(default={},type='dict'),
             upgradeStrategy_minimumHealthCapacity=dict(),
             upgradeStrategy_maximumOverCapacity=dict(),
             force=dict(default=False, type='bool'),
