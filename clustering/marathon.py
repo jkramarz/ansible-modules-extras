@@ -100,6 +100,11 @@ options:
     description:
      - The executor to use to launch this application.
 
+  user:
+    required: false
+    description:
+      - The user to use to launch this application.
+
   container:
     required: false
     description:
@@ -319,7 +324,7 @@ def create(restbase, user, passwd, params):
     data = {'id': params['id']}
 
     # Merge in any additional or overridden fields
-    for arg in ['cmd', 'args', 'cpus', 'mem', 'ports', 'requirePorts', 'instances', 'executor', 'container', 'env', 'constraints', 'acceptedResourceRoles', 'labels', 'uris', 'dependencies', 'healthChecks', 'backoffFactor', 'backoffSeconds', 'maxLaunchDelaySeconds', 'upgradeStrategy']:
+    for arg in ['cmd', 'args', 'cpus', 'mem', 'ports', 'requirePorts', 'instances', 'user', 'executor', 'container', 'env', 'constraints', 'acceptedResourceRoles', 'labels', 'uris', 'dependencies', 'healthChecks', 'backoffFactor', 'backoffSeconds', 'maxLaunchDelaySeconds', 'upgradeStrategy']:
       if params[arg]:
         data.update({arg: params[arg]})
 
@@ -336,7 +341,7 @@ def edit(restbase, user, passwd, params):
     data = {'id': params['id']}
 
     # Merge in any additional or overridden fields
-    for arg in ['cmd', 'args', 'cpus', 'mem', 'ports', 'requirePorts', 'instances', 'executor', 'container', 'env', 'constraints', 'acceptedResourceRoles', 'labels', 'uris', 'dependencies', 'healthChecks', 'backoffFactor', 'backoffSeconds', 'maxLaunchDelaySeconds', 'upgradeStrategy']:
+    for arg in ['cmd', 'args', 'cpus', 'mem', 'ports', 'requirePorts', 'instances', 'user', 'executor', 'container', 'env', 'constraints', 'acceptedResourceRoles', 'labels', 'uris', 'dependencies', 'healthChecks', 'backoffFactor', 'backoffSeconds', 'maxLaunchDelaySeconds', 'upgradeStrategy']:
       if params[arg]:
         data.update({arg: params[arg]})
 
@@ -440,6 +445,7 @@ def main():
             requirePorts=dict(default=False, type='bool'),
             instances=dict(type='int'),
             executor=dict(default="",type='str'),
+            user=dict(type='str'),
             container=dict(type='dict'),
             docker_image=dict(),
             docker_forcePullImage=dict(default=False, type='bool'),
