@@ -264,6 +264,24 @@ EXAMPLES = """
 
 """
 
+RETURN = """
+changed=True, uri=uri, state=state, meta=ret
+uri:
+    description: URI of the Marathon application
+    returned: success
+    type: string
+    sample: /my-app
+state:
+    description: state of the target, after execution
+    returned: success
+    type: string
+    sample: "present"
+meta:
+    description: additional information returned by Marathon, depends on the operation performed
+    returned: success
+    type: object
+"""
+
 import base64
 
 def request(url, user=None, passwd=None, data=None, method=None):
@@ -530,7 +548,7 @@ def main():
         return module.fail_json(msg=e.message)
 
 
-    module.exit_json(changed=True, meta=ret)
+    module.exit_json(changed=True, uri=uri, state=state, meta=ret)
 
 
 from ansible.module_utils.basic import *
