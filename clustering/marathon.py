@@ -265,7 +265,6 @@ EXAMPLES = """
 """
 
 RETURN = """
-changed=True, uri=uri, state=state, meta=ret
 uri:
     description: URI of the Marathon application
     returned: success
