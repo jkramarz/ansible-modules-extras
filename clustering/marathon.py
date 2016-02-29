@@ -494,6 +494,15 @@ def main():
       mappings = [dict((k, int(v)) for k,v in kv.iteritems()) for kv in mappings]
       module.params['docker_portMappings'] = mappings
 
+    # Ensure that we use int values for some healthChecks parameters
+    if module.params['healthChecks']:
+      healthChecks = module.params['healthChecks']
+      for checks in healthChecks:
+        for param in ['port', 'gracePeriodSeconds', 'intervalSeconds', 'timeoutSeconds', 'maxConsecutiveFailures']:
+          if param in checks:
+            checks[param] = int(checks[param])
+      module.params['healthChecks'] = healthChecks
+
     if module.params['docker_image'] and not module.params['container']:
       module.params['container'] = { 'type': 'DOCKER', 'docker': { 'image': module.params['docker_image'], 'forcePullImage': bool(module.params['docker_forcePullImage']), 'privileged': bool(module.params['docker_privileged']), 'network': module.params['docker_network'], 'parameters': module.params['docker_parameters'], 'portMappings': module.params['docker_portMappings']}, 'volumes': module.params['container_volumes']}
 
