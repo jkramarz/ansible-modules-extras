@@ -333,8 +333,13 @@ def put(url, user, passwd, data):
 def get(url, user, passwd):
     return request(url, user, passwd)
 
-def delete(url, user, passwd):
-    return request(url, user, passwd, data=None, method='DELETE')
+def delete(url, user, passwd, params):
+    ret, info = tryRequest(url, user, passwd, data=None, method='DELETE')
+
+    if params['waitTimeout'] and info['status'] in (200, 204) and 'deploymentId' in ret:
+      waitForDeployment(url, user, passwd, params, ret['deploymentId'])
+
+    return ret
 
 def create(restbase, user, passwd, params):
     data = {'id': params['id']}
@@ -394,9 +399,12 @@ def restart(restbase, user, passwd, params):
         'force': params['force']
         }
 
-    url = restbase + '/apps/' + params['id'] + '/restart'   
+    url = restbase + '/apps/' + params['id'] + '/restart'
 
-    ret = post(url, user, passwd, data) 
+    ret = post(url, user, passwd, data)
+
+    if params['waitTimeout']:
+      waitForDeployment(restbase, user, passwd, params, ret['deployments'][0]['id'])
 
     return ret
 
@@ -412,7 +420,7 @@ def versions(restbase, user, passwd, params):
 
 def destroy(restbase, user, passwd, params):
     url = restbase + '/apps/' + params['id']
-    ret = delete(url, user, passwd) 
+    ret = delete(url, user, passwd, params)
     return ret
 
 def absent(restbase, user, passwd, params):
@@ -432,8 +440,12 @@ def present(restbase, user, passwd, params):
       return create(restbase, user, passwd, params)
 
 def kill(restbase, user, passwd, params):
-    url = restbase + '/apps/' + params['id'] + '/tasks'  
-    ret = delete(url, user, passwd) 
+    url = restbase + '/apps/' + params['id'] + '/tasks'
+    ret = delete(url, user, passwd, params)
+
+    if params['waitTimeout']:
+      waitForDeployment(restbase, user, passwd, params, ret['deployments'][0]['id'])
+    
     return ret
 
 # Some parameters are required depending on the operation:
