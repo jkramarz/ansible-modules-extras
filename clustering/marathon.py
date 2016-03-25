@@ -31,7 +31,6 @@ options:
       - Base URI for the Marathon instance
 
   state:
-    required: true
     choices: [ present, absent, restart, kill ]
     default: "present"
     description:
@@ -39,11 +38,13 @@ options:
 
   username:
     required: false
+    default: null
     description:
       - The username to log-in with.
 
   password:
     required: false
+    default: null
     description:
       - The password to log-in with.
 
@@ -52,171 +53,210 @@ options:
     description:
       - Unique identifier for the app consisting of a series of names separated by slashes.
 
-  command:
-    aliases: [ cmd ]
+  cmd:
+    aliases: [ command ]
     required: false
+    default: null
     description:
       - The command that is executed.
 
-  arguments:
-    aliases: [ args ]
+  args:
+    aliases: [ arguments ]
     required: false
+    default: null
     description:
       - An array of strings that represents an alternative mode of specifying the command to run.
 
   cpus:
     required: false
+    default: 1.0
     description:
       - The number of CPU`s this application needs per instance. This number does not have to be integer, but can be a fraction.
 
   memory:
     aliases: [ mem ]
     required: false
+    default: 128.0
     description:
       - The amount of memory in MB that is needed for the application per instance.
 
   disk:
     required: false
+    default: 0.0
     description:
       - The amount of disk in MB that is reserved for the application per instance.
 
   ports:
     required: false
+    default: []
     description:
       - An array of required port resources on the host.
 
   requirePorts:
     required: false
+    default: false
     description:
       - If true, the ports you have specified are used as host ports.
 
   instances:
     required: false
+    default: 1
     description:
       - The number of instances of this application to start.
 
   executor:
     required: false
+    default: ""
     description:
       - The executor to use to launch this application.
 
   user:
     required: false
+    default: null
     description:
       - The user to use to launch this application.
 
   container:
     required: false
+    default: null
     description:
       - Additional data passed to the containerizer on application launch. This is a free-form data structure that can contain arbitrary data.
 
   docker_image:
     required: false
+    default: null
     description:
       - Name of the Docker image. Ignored if container is defined.
 
   docker_forcePullImage:
     required: false
+    default: false
     description:
       - Force Docker to pull the image before launching each task. Ignored if container is defined.
 
   docker_privileged:
     required: false
+    default: false
     description:
       - Allows users to run containers in privileged mode. Ignored if container is defined.
 
   docker_network:
     required: false
+    default: 'NONE'
     description:
-      - Type of networking for the Docker container. Ignored if container is defined.
+      - The networking mode, this container should operate in. One of BRIDGED|HOST|NONE. Ignored if container is defined.
 
   docker_portMappings:
     required: false
+    default: null
     description:
-      - Port mappings for the Docker container. Ignored if container is defined.
+      - Port mappings for the Docker container, an array of objects containing containerPort, hostPort, labels, name, protocol, servicePort properties. Ignored if container is defined.
 
   docker_parameters:
     required: false
+    default: null
     description:
       - Arbitrary parameters for the Docker container. Ignored if container is defined.
 
+  container_type:
+    required: false
+    default: DOCKER if docker_image is defined otherwise MESOS
+    description:
+      - Supported container types at the moment are DOCKER and MESOS. Ignored if container is defined.
+
   container_volumes:
     required: false
+    default: null
     description:
-      - Array of volumes for the container. Ignored if container is defined.
+      - Array of volumes for the container defining for each volume the properties containerPath, hostPath, persistent, mode. Ignored if container is defined.
 
   env:
     required: false
+    default: []
     description:
       - Key value pairs that get added to the environment variables of the process to start.
 
   constraints:
     required: false
+    default: []
     description:
       - Valid constraint operators are one of ["UNIQUE", "CLUSTER", "GROUP_BY"].
 
   acceptedResourceRoles:
     required: false
+    default: null
     description:
       - A list of resource roles.
 
   labels:
     required: false
+    default: null
     description:
       - Attaching metadata to apps can be useful to expose additional information to other services, so we added the ability to place labels on apps.
 
   uris:
     required: false
+    default: []
     description:
       - URIs defined here are resolved, before the application gets started. If the application has external dependencies, they should be defined here.
 
   storeUrls:
     required: false
+    default: []
     description:
       - a sequence of URIs, that get fetched on each instance, that gets started. The artifact could be fetched directly from the source, or put into the artifact store. One simple way to do this is automatic artifact storing.
 
   dependencies:
     required: false
+    default: []
     description:
       - A list of services upon which this application depends.
 
   healthChecks:
     required: false
+    default: []
     description:
       - An array of checks to be performed on running tasks to determine if they are operating as expected.
 
   backoffSeconds:
     required: false
+    default: 1
     description:
       - Configures exponential backoff behavior when launching potentially sick apps. The backoff period is multiplied by the factor for each consecutive failure until it reaches maxLaunchDelaySeconds.
 
   backoffFactor:
     required: false
+    default: 1.15
     description:
       - Configures exponential backoff behavior when launching potentially sick apps. The backoff period is multiplied by the factor for each consecutive failure until it reaches maxLaunchDelaySeconds.
 
   maxLaunchDelaySeconds:
     required: false
+    default: 3600
     description:
       - Configures exponential backoff behavior when launching potentially sick apps. The backoff period is multiplied by the factor for each consecutive failure until it reaches maxLaunchDelaySeconds.
 
   upgradeStrategy_minimumHealthCapacity:
     required: false
+    default: 1.0
     description:
       - a number between 0and 1 that is multiplied with the instance count. This is the minimum number of healthy nodes that do not sacrifice overall application purpose.
 
   upgradeStrategy_maximumOverCapacity:
     required: false
+    default: 0.0
     description:
       - a number between 0 and 1 which is multiplied with the instance count. This is the maximum number of additional instances launched at any point of time during the upgrade process.
 
   force:
     required: false
+    default: false
     description:
       - If the app is affected by a running deployment, then the update operation will fail. The current deployment can be overridden by setting the `force` query parameter. Default: false.
 
   waitTimeout:
     required: false
+    default: 0
     description:
       - If set, wait for the application to become available until timeout seconds.
 
@@ -460,39 +500,40 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             uri=dict(required=True),
-            state=dict(choices=['absent', 'present', 'restart', 'kill'], required=True),
+            state=dict(default='present', choices=['absent', 'present', 'restart', 'kill']),
             username=dict(required=False,default=None),
             password=dict(required=False,default=None),
             id=dict(type='str'),
             cmd=dict(aliases=['command'], type='str'),
             args=dict(aliases=['arguments'], type='list'),
-            cpus=dict(type='float'),
-            mem=dict(aliases=['memory'],type='int'),
-            disk=dict(default=0,type='int'),
-            ports=dict(default=[],type='list'),
+            cpus=dict(type='float', default=1.0),
+            mem=dict(default=128.0, aliases=['memory'],type='float'),
+            disk=dict(default=0.0, type='float'),
+            ports=dict(default=[], type='list'),
             requirePorts=dict(default=False, type='bool'),
-            instances=dict(type='int'),
-            executor=dict(default="",type='str'),
+            instances=dict(default=1, type='int'),
+            executor=dict(default="", type='str'),
             user=dict(type='str'),
             container=dict(type='dict'),
             docker_image=dict(),
             docker_forcePullImage=dict(default=False, type='bool'),
             docker_privileged=dict(default=False, type='bool'),
-            docker_network=dict(default='none', type='str'),
-            docker_parameters=dict(default=[],type='list'),
-            docker_portMappings=dict(default=[],type='list'),
-            container_volumes=dict(default=[],type='list'),
-            env=dict(default={},type='dict'),
-            constraints=dict(default=[],type='list'),
-            acceptedResourceRoles=dict(),
+            docker_network=dict(default='NONE', type='str'),
+            docker_parameters=dict(default=[], type='list'),
+            docker_portMappings=dict(default=[], type='list'),
+            container_type=dict(default='MESOS', type='str'),
+            container_volumes=dict(default=[], type='list'),
+            env=dict(default={}, type='dict'),
+            constraints=dict(default=[], type='list'),
+            acceptedResourceRoles=dict(default=[], type='list'),
             labels=dict(type='list'),
-            uris=dict(default=[],type='list'),
-            dependencies=dict(default=[],type='list'),
-            healthChecks=dict(default=[],type='list'),
-            backoffSeconds=dict(type='float'),
-            backoffFactor=dict(type='float'),
-            maxLaunchDelaySeconds=dict(type='float'),
-            upgradeStrategy=dict(default={},type='dict'),
+            uris=dict(default=[], type='list'),
+            dependencies=dict(default=[], type='list'),
+            healthChecks=dict(default=[], type='list'),
+            backoffSeconds=dict(type='float', default=1.0),
+            backoffFactor=dict(type='float', default=1.15),
+            maxLaunchDelaySeconds=dict(type='float', default=3600),
+            upgradeStrategy=dict(default={}, type='dict'),
             upgradeStrategy_minimumHealthCapacity=dict(),
             upgradeStrategy_maximumOverCapacity=dict(),
             force=dict(default=False, type='bool'),
@@ -533,6 +574,8 @@ def main():
 
     if module.params['docker_image'] and not module.params['container']:
       module.params['container'] = { 'type': 'DOCKER', 'docker': { 'image': module.params['docker_image'], 'forcePullImage': bool(module.params['docker_forcePullImage']), 'privileged': bool(module.params['docker_privileged']), 'network': module.params['docker_network'], 'parameters': module.params['docker_parameters'], 'portMappings': module.params['docker_portMappings']}, 'volumes': module.params['container_volumes']}
+    else if module.params['container_volumes'] and not module.params['container']:
+      module.params['container'] = { 'type': module.params['container_type'], 'volumes': module.params['container_volumes']}
 
     if module.params['upgradeStrategy_minimumHealthCapacity']:
       module.params['upgradeStrategy'].update({'minimumHealthCapacity': module.params['upgradeStrategy_minimumHealthCapacity']})
