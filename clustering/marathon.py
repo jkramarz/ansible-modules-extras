@@ -275,7 +275,7 @@ options:
     required: false
     default: false
     description:
-      - If the app is affected by a running deployment, then the update operation will fail. The current deployment can be overridden by setting the I(force) query parameter. Default: false.
+      - If the app is affected by a running deployment, then the update operation will fail. The current deployment can be overridden by setting the I(force) query parameter.
 
   wait_timeout:
     aliases: [ waitTimeout ]
