@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# (c) 2015, Ludovic Claude <ludovic.claude@laposte.net>
+# (c) 2016, Ludovic Claude <ludovic.claude@laposte.net>
 #
 # This file is part of Ansible
 #
@@ -204,8 +204,8 @@ options:
     description:
       - URIs defined here are resolved, before the application gets started. If the application has external dependencies, they should be defined here.
 
-  storeUrls:
-    aliases: [ store_urls ]
+  store_urls:
+    aliases: [ storeUrls ]
     required: false
     default: []
     description:
