@@ -601,8 +601,9 @@ def main():
 
     if module.params['docker_image'] and not module.params['container']:
       module.params['container'] = { 'type': 'DOCKER', 'docker': { 'image': module.params['docker_image'], 'forcePullImage': bool(module.params['docker_forcePullImage']), 'privileged': bool(module.params['docker_privileged']), 'network': module.params['docker_network'], 'parameters': module.params['docker_parameters'], 'portMappings': module.params['docker_portMappings']}, 'volumes': module.params['container_volumes']}
-    else if module.params['container_volumes'] and not module.params['container']:
-      module.params['container'] = { 'type': module.params['container_type'], 'volumes': module.params['container_volumes']}
+    else:
+      if module.params['container_volumes'] and not module.params['container']:
+        module.params['container'] = { 'type': module.params['container_type'], 'volumes': module.params['container_volumes']}
 
     if module.params['upgradeStrategy_minimumHealthCapacity']:
       module.params['upgradeStrategy'].update({'minimumHealthCapacity': module.params['upgradeStrategy_minimumHealthCapacity']})
