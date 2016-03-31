@@ -88,7 +88,7 @@ options:
 
   ports:
     required: false
-    default: []
+    default: '[]'
     description:
       - An array of required port resources on the host.
 
@@ -175,13 +175,13 @@ options:
 
   env:
     required: false
-    default: []
+    default: '[]'
     description:
       - Key value pairs that get added to the environment variables of the process to start.
 
   constraints:
     required: false
-    default: []
+    default: '[]'
     description:
       - Valid constraint operators are one of ["UNIQUE", "CLUSTER", "GROUP_BY"].
 
@@ -200,33 +200,33 @@ options:
 
   uris:
     required: false
-    default: []
+    default: '[]'
     description:
       - URIs defined here are resolved, before the application gets started. If the application has external dependencies, they should be defined here.
 
   store_urls:
     aliases: [ storeUrls ]
     required: false
-    default: []
+    default: '[]'
     description:
       - a sequence of URIs, that get fetched on each instance, that gets started. The artifact could be fetched directly from the source, or put into the artifact store. One simple way to do this is automatic artifact storing.
 
   dependencies:
     required: false
-    default: []
+    default: '[]'
     description:
       - A list of services upon which this application depends.
 
   fetch:
     required: false
-    default: []
+    default: '[]'
     description:
       - Provided URIs are passed to Mesos fetcher module and resolved in runtime.
 
   health_checks:
     aliases: [ healthChecks ]
     required: false
-    default: []
+    default: '[]'
     description:
       - An array of checks to be performed on running tasks to determine if they are operating as expected.
 
