@@ -256,7 +256,7 @@ options:
     required: false
     default: 1.0
     description:
-      - a number between 0and 1 that is multiplied with the instance count. This is the minimum number of healthy nodes that do not sacrifice overall application purpose.
+      - a number between 0 and 1 that is multiplied with the instance count. This is the minimum number of healthy nodes that do not sacrifice overall application purpose.
 
   upgrade_strategy_maximum_over_capacity:
     aliases: [ upgradeStrategy_maximumOverCapacity ]
@@ -275,7 +275,7 @@ options:
     required: false
     default: false
     description:
-      - If the app is affected by a running deployment, then the update operation will fail. The current deployment can be overridden by setting the `force` query parameter. Default: false.
+      - If the app is affected by a running deployment, then the update operation will fail. The current deployment can be overridden by setting the I(force) query parameter. Default: false.
 
   wait_timeout:
     aliases: [ waitTimeout ]
