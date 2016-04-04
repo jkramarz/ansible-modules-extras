@@ -568,7 +568,7 @@ def main():
             healthChecks=dict(aliases=['health_checks'], default=[], type='list'),
             backoffSeconds=dict(aliases=['backoff_seconds'], type='float', default=1.0),
             backoffFactor=dict(aliases=['backoff_factor'], type='float', default=1.15),
-            maxLaunchDelaySeconds=dict(aliases=['max_launch_delay_seconds'], type='float', default=3600),
+            maxLaunchDelaySeconds=dict(aliases=['max_launch_delay_seconds'], type='float', default=3600.0),
             upgradeStrategy=dict(aliases=['upgrade_strategy'], default={}, type='dict'),
             upgradeStrategy_minimumHealthCapacity=dict(aliases=['upgrade_strategy_minimum_health_capacity'], default=0.0, type='float'),
             upgradeStrategy_maximumOverCapacity=dict(aliases=['upgrade_strategy_maximum_over_capacity'], default=0.0, type='float'),
