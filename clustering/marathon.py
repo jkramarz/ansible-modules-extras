@@ -359,14 +359,14 @@ def request(url, user=None, passwd=None, data=None, method=None):
     if data:
         data = json.dumps(data)
 
-    if user != None:
+    if user is not None:
       auth = base64.encodestring('%s:%s' % (user, passwd)).replace('\n', '')
       response, info = fetch_url(module, url, data=data, method=method, 
-                               headers={'Content-Type':'application/json',
-                                        'Authorization':"Basic %s" % auth})
+                                 headers={'Content-Type':'application/json',
+                                          'Authorization':"Basic %s" % auth})
     else:
       response, info = fetch_url(module, url, data=data, method=method, 
-                               headers={'Content-Type':'application/json'})
+                                 headers={'Content-Type':'application/json'})
 
     if info['status'] not in (200, 204):
         module.fail_json(msg=info['msg'])
@@ -379,14 +379,14 @@ def request(url, user=None, passwd=None, data=None, method=None):
         return {}
 
 def tryRequest(url, user=None, passwd=None, data=None, method=None):
-    if user != None:
+    if user is not None:
       auth = base64.encodestring('%s:%s' % (user, passwd)).replace('\n', '')
       response, info = fetch_url(module, url, data=data, method=method,
-                               headers={'Content-Type':'application/json',
-                                        'Authorization':"Basic %s" % auth})
+                                 headers={'Content-Type':'application/json',
+                                          'Authorization':"Basic %s" % auth})
     else:
       response, info = fetch_url(module, url, data=data, method=method,
-                               headers={'Content-Type':'application/json'})
+                                 headers={'Content-Type':'application/json'})
 
     body = {}
 
@@ -470,7 +470,7 @@ def waitForDeployment(restbase, user, passwd, params, deploymentId):
 def restart(restbase, user, passwd, params):
     data = {
         'force': params['force']
-        }
+    }
 
     url = restbase + '/apps/' + params['id'] + '/restart'
 
@@ -623,7 +623,7 @@ def main():
       module.params['upgradeStrategy'].update({'maximumOverCapacity': module.params['upgradeStrategy_maximumOverCapacity']})
 
     if not uri.endswith('/'):
-        uri = uri+'/'
+        uri = uri + '/'
     restbase = uri + 'v2'
 
     # Dispatch
