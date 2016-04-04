@@ -359,7 +359,7 @@ def request(url, user=None, passwd=None, data=None, method=None):
     if data:
         data = json.dumps(data)
 
-    if not user:
+    if user != None:
       auth = base64.encodestring('%s:%s' % (user, passwd)).replace('\n', '')
       response, info = fetch_url(module, url, data=data, method=method, 
                                headers={'Content-Type':'application/json',
@@ -379,7 +379,7 @@ def request(url, user=None, passwd=None, data=None, method=None):
         return {}
 
 def tryRequest(url, user=None, passwd=None, data=None, method=None):
-    if not user:
+    if user != None:
       auth = base64.encodestring('%s:%s' % (user, passwd)).replace('\n', '')
       response, info = fetch_url(module, url, data=data, method=method,
                                headers={'Content-Type':'application/json',
