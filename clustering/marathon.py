@@ -309,7 +309,7 @@ EXAMPLES = """
       POSTGRES_PASSWORD: "{{ postgres_password }}"
     instances: 1
     cpus: 0.2
-    mem: 128
+    mem: 128.0
     ports: []
     require_ports: false
     constraints: []
