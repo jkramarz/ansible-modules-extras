@@ -284,6 +284,15 @@ options:
     description:
       - If set, wait for the application to become available until timeout seconds.
 
+  validate_certs:
+    description:
+      - If C(no), SSL certificates will not be validated. This should only be
+        set to C(no) when no other option exists.  Prior to 1.9.3 the code
+        defaulted to C(no).
+    required: false
+    default: 'yes'
+    choices: ['yes', 'no']
+
 author: "Ludovic Claude (@ludovicc)"
 """
 
@@ -564,7 +573,9 @@ def main():
             upgradeStrategy_minimumHealthCapacity=dict(aliases=['upgrade_strategy_minimum_health_capacity'], default=0.0, type='float'),
             upgradeStrategy_maximumOverCapacity=dict(aliases=['upgrade_strategy_maximum_over_capacity'], default=0.0, type='float'),
             force=dict(default=False, type='bool'),
-            waitTimeout=dict(aliases=['wait_timeout'], type='int')
+            waitTimeout=dict(aliases=['wait_timeout'], type='int'),
+            validate_certs=dict(required=False, default=True, type='bool')
+
         ),
         supports_check_mode=False
     )
