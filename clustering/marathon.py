@@ -361,11 +361,11 @@ def request(url, user=None, passwd=None, data=None, method=None):
 
     if user is not None:
       auth = base64.encodestring('%s:%s' % (user, passwd)).replace('\n', '')
-      response, info = fetch_url(module, url, data=data, method=method, 
+      response, info = fetch_url(module, url, data=data, method=method,
                                  headers={'Content-Type':'application/json',
                                           'Authorization':"Basic %s" % auth})
     else:
-      response, info = fetch_url(module, url, data=data, method=method, 
+      response, info = fetch_url(module, url, data=data, method=method,
                                  headers={'Content-Type':'application/json'})
 
     if info['status'] not in (200, 204):
@@ -483,12 +483,12 @@ def restart(restbase, user, passwd, params):
 
 def fetch(restbase, user, passwd, params):
     url = restbase + '/apps/' + params['id']
-    ret = get(url, user, passwd) 
+    ret = get(url, user, passwd)
     return ret
 
 def versions(restbase, user, passwd, params):
     url = restbase + '/apps/' + params['id'] + '/versions'
-    ret = get(url, user, passwd) 
+    ret = get(url, user, passwd)
     return ret
 
 def destroy(restbase, user, passwd, params):
@@ -518,7 +518,7 @@ def kill(restbase, user, passwd, params):
 
     if params['waitTimeout']:
       waitForDeployment(restbase, user, passwd, params, ret['deployments'][0]['id'])
-    
+
     return ret
 
 # Some parameters are required depending on the operation:
@@ -628,7 +628,7 @@ def main():
 
     # Dispatch
     try:
-        
+
         # Lookup the corresponding method for this operation. This is
         # safe as the AnsibleModule should remove any unknown operations.
         thismod = sys.modules[__name__]
