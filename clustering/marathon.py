@@ -17,7 +17,7 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 
 DOCUMENTATION = """
-module: marathon_app
+module: marathon
 version_added: "2.1"
 short_description: start and stop applications with Marathon
 description:
@@ -299,7 +299,7 @@ author: "Ludovic Claude (@ludovicc)"
 EXAMPLES = """
 # Launch Postgres in a Docker container using Marathon, wait for the deployment to complete
 - name: Launch Postgres using Marathon
-  marathon_app:
+  marathon:
     uri: "{{ marathon_url }}"
     id: "/postgres"
     state: "present"
